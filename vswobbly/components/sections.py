@@ -112,7 +112,12 @@ class Sections(list[Section]):
 
             pattern_props.append(self[section_idx].dominant_pattern)
 
-        return clip.std.FrameEval(lambda n: fps_clips[indices[n]].std.SetFrameProps(WobblyPattern=pattern_props[n]))
+        metadata_clip = clip.std.BlankClip(fpsnum=0, fpsden=1)
+
+        return metadata_clip.std.FrameEval(
+            lambda n: fps_clips[indices[n]].std.SetFrameProps(WobblyPattern=pattern_props[n]),
+            clip_src=fps_clips,
+        )
 
     def set_patterns(self, matches: FieldMatches) -> None:
         """Set the dominant patterns for all sections based on the matches."""
