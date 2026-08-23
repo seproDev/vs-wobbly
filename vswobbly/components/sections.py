@@ -89,7 +89,7 @@ class Sections(list[Section]):
 
         fps_clips = [
             clip.std.AssumeFPS(None, int(fps), wclip.fps.denominator).std.SetFrameProps(
-                WobblyCycleFps=int(fps // 1000), _DurationNum=int(fps), _DurationDen=wclip.fps.denominator
+                WobblyCycleFps=int(fps // 1000)
             )
             for fps in framerates
         ]
