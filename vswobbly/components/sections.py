@@ -1,6 +1,6 @@
 from bisect import bisect_left
+from collections import Counter
 from dataclasses import dataclass, field
-from math import ceil
 from typing import Literal
 
 from vstools import Keyframes, vs
@@ -94,19 +94,8 @@ class Sections(list[Section]):
             for fps in framerates
         ]
 
-        max_dec = max(wobbly_parsed.decimations) + 1
-
-        split_decimations = [
-            [j for j in range(i * cycle, min((i + 1) * cycle, max_dec)) if j in wobbly_parsed.decimations]
-            for i in range(ceil(max_dec / cycle))
-        ]
-
-        n_split_decimations = len(split_decimations)
-
-        indices = [
-            0 if (sd_idx := ceil(n / cycle)) >= n_split_decimations else len(split_decimations[sd_idx])
-            for n in range(clip.num_frames)
-        ]
+        decimations_per_cycle = Counter(frame // cycle for frame in wobbly_parsed.decimations)
+        indices = [decimations_per_cycle[n // cycle] for n in range(clip.num_frames)]
 
         # Set pattern for each frame based on which section it falls into
         pattern_props = []
