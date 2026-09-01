@@ -21,26 +21,14 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Set up Python
-              uses: actions/setup-python@v5
-              with:
-                  python-version: "3.12"
-
-            - name: Install build tools
-              run: |
-                  python -m pip install --upgrade pip
-                  pip install build setuptools twine
-              continue-on-error: false
+            - name: Install uv
+              uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
 
             - name: Build wheel and source distribution
-              run: |
-                  python -m build --wheel --sdist --outdir dist/
-              continue-on-error: false
+              run: uv build --no-sources
 
             - name: Check the output
-              run: |
-                  python -m twine check --strict dist/*
-              continue-on-error: false
+              run: uvx twine check --strict dist/*
 
             - name: Publish package distributions to PyPI
               uses: pypa/gh-action-pypi-publish@release/v1

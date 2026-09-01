@@ -11,7 +11,7 @@ on:
     branches:
       - master
     paths:
-      - vswobbly/_metadata.py
+      - pyproject.toml
 
 jobs:
   new_version:
@@ -20,9 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+
       - name: Get version number
-        run: |
-          echo "CURR_VER=v$(python -c "import runpy;runpy.run_path('vswobbly/_metadata.py', None, '__github__')")" >> $GITHUB_ENV
+        run: echo "CURR_VER=v$(uv version --short --frozen)" >> "$GITHUB_ENV"
 
       - name: Check if version exists
         env:

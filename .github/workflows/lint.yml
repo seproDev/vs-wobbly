@@ -12,34 +12,39 @@ on:
       - support/**
     paths:
       - '**.py'
+      - pyproject.toml
+      - uv.lock
+      - .github/workflows/lint.yml
   pull_request:
     paths:
       - '**.py'
+      - pyproject.toml
+      - uv.lock
+      - .github/workflows/lint.yml
 
 jobs:
   windows:
     runs-on: windows-latest
     strategy:
       matrix:
-        vs-versions:
-          - 70
         python-version:
           - '3.12'
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
-          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+
+      - name: Install Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install vapoursynth-portable==${{ matrix.vs-versions }}
-          pip install -r requirements.txt
-          pip install -r requirements-dev.txt
+        run: uv sync --locked
 
-      - name: Running ruff
-        run: ruff check vswobbly
+      - name: Run Ruff
+        run: uv run --locked ruff check vswobbly

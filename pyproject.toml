@@ -3,8 +3,56 @@ name = "vs-wobbly"
 version = "0.4.0"
 description = "Vapoursynth wobbly project file parser and processing."
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "LightArrowsEXE", email = "LightArrowsReboot@gmail.com" },
+]
 requires-python = ">=3.12"
+classifiers = [
+    "Natural Language :: English",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Other Audience",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Video :: Display",
+]
 dependencies = [
     "vapoursynth>=74",
     "vsjetpack>=1.5.0",
 ]
+
+[dependency-groups]
+dev = ["ruff>=0.6.9"]
+
+[project.urls]
+Source = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-wobbly"
+Contact = "https://discord.gg/XTpc6Fa9eB"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "vswobbly"
+module-root = ""
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py312"
+required-version = ">=0.6.9"
+output-format = "github"
+show-fixes = true
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
